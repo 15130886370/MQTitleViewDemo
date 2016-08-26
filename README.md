@@ -10,5 +10,6 @@
 
 别忘了将titleView添加到navgationItem上哦,具体参见demo
 效果是这样的
-![demo.png](http://upload-images.jianshu.io/upload_images/1526313-9d730d27bf3e68ed.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![demo.jpeg](http://upload-images.jianshu.io/upload_images/1526313-98eddaaf1043d63c.jpeg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
 
