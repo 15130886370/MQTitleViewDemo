@@ -9,4 +9,5 @@
 ```
 
 别忘了将titleView添加到navgationItem上哦,具体参见demo
-
+效果是这样的
+<img src="/Users/ittmomwang/Desktop/demo.png">
