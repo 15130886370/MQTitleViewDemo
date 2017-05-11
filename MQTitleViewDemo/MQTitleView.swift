@@ -21,7 +21,7 @@ class MQTitleView: UIView {
     var line = UIView() //底部的线条
     var button : UIButton? //标题按钮
     var buttons = [UIButton]() //存放按钮的数组
-    var buttonClickedBolck : ((index : Int)->())? //按钮的点击回调
+    var buttonClickedBolck : ((_ index : Int)->())? //按钮的点击回调
     
     var Width: CGFloat! //titleView的宽度
     var Height: CGFloat! //titleView的高度
@@ -42,29 +42,29 @@ class MQTitleView: UIView {
      - parameter btnSelected: 处理按钮点击事件的尾随闭包,indexTag传人按钮的tag值,以区分按钮
      
      */
-    convenience init(count: Int,size: CGSize,titleArray: [AnyObject],btnSelected: ((index : Int)->())) {
-        self.init(frame: (CGRectMake(0, 0, size.width, size.height)))
+    convenience init(count: Int,size: CGSize,titleArray: [AnyObject],btnSelected: @escaping ((_ index : Int)->())) {
+        self.init(frame: (CGRect(x: 0, y: 0, width: size.width, height: size.height)))
         //按钮的点击回调
         buttonClickedBolck = btnSelected
         Width = size.width / CGFloat(count)
         Height = size.height
         
         for index in 0...count-1 {
-            button = UIButton(type: .Custom)
-            button!.frame = CGRectMake(CGFloat(index) * Width, 0, Width, Height)
+            button = UIButton(type: .custom)
+            button!.frame = CGRect(x: CGFloat(index) * Width, y: 0, width: Width, height: Height)
             button!.tag = index + 100
-            button!.setTitle(titleArray[index] as? String, forState: .Normal)
-            button?.titleLabel?.font = UIFont.systemFontOfSize(17)
+            button!.setTitle(titleArray[index] as? String, for: UIControlState())
+            button?.titleLabel?.font = UIFont.systemFont(ofSize: 17)
             if index == 0 {
-                button!.selected = true
+                button!.isSelected = true
             }
             
-            button!.addTarget(self, action: #selector(MQTitleView.buttonClicked(_:)), forControlEvents: .TouchUpInside)
+            button!.addTarget(self, action: #selector(MQTitleView.buttonClicked(_:)), for: .touchUpInside)
             buttons.append(button!)
             self.addSubview(button!)
         }
         //导航栏下面的线
-        line.frame = CGRectMake(0, Height - 3, Width, 3)
+        line.frame = CGRect(x: 0, y: Height - 3, width: Width, height: 3)
         
         self.addSubview(line)
     }
@@ -74,26 +74,26 @@ class MQTitleView: UIView {
         setTitleButton()
     }
     
-    private func setTitleButton()
+    fileprivate func setTitleButton()
     {
-        let defaultNormalColor = UIColor.blackColor()
-        let defaultSelectedColor = UIColor.orangeColor()
+        let defaultNormalColor = UIColor.black
+        let defaultSelectedColor = UIColor.orange
         for subButton in buttons
         {
             if let normal = normalColor{
-                subButton.setTitleColor(normal, forState: .Normal)
+                subButton.setTitleColor(normal, for: UIControlState())
             }else{
-                subButton.setTitleColor(defaultNormalColor, forState: .Normal)
+                subButton.setTitleColor(defaultNormalColor, for: UIControlState())
             }
             if let selected = selectedColor{
-                subButton.setTitleColor(selected, forState: .Selected)
+                subButton.setTitleColor(selected, for: .selected)
                 line.backgroundColor = selected
             }else{
-                subButton.setTitleColor(defaultSelectedColor, forState: .Selected)
+                subButton.setTitleColor(defaultSelectedColor, for: .selected)
                 line.backgroundColor = defaultSelectedColor
             }
             if let font = fontSize{
-                subButton.titleLabel?.font = UIFont.systemFontOfSize(font)
+                subButton.titleLabel?.font = UIFont.systemFont(ofSize: font)
             }
         }
     }
@@ -102,42 +102,42 @@ class MQTitleView: UIView {
      按钮的点击事件,已处理按钮的选中状态,以及底部线条的offset,其它
      切换控制器控制scrollView的操作在
      */
-    func buttonClicked(sender: UIButton){
-        if sender.selected {
+    func buttonClicked(_ sender: UIButton){
+        if sender.isSelected {
             return
         }
         let tag = sender.tag
-        UIView .animateWithDuration(duration) { () -> Void in
-            self.line.frame = CGRectMake(CGFloat(self.Width * CGFloat(tag-100)), 41, self.Width, 3)
+        UIView .animate(withDuration: duration, animations: { () -> Void in
+            self.line.frame = CGRect(x: CGFloat(self.Width * CGFloat(tag-100)), y: 41, width: self.Width, height: 3)
             if self.buttonClickedBolck != nil {
-                self.buttonClickedBolck!(index: tag - 100)
+                self.buttonClickedBolck!(tag - 100)
             }
             for btn in (self.subviews) {
                     if btn.tag > 0 {
                         let newBtn = btn as! UIButton
-                        newBtn.selected = false
+                        newBtn.isSelected = false
                     }
             }
-        }
-        sender.selected = true
+        }) 
+        sender.isSelected = true
 
     }
     /**
      外界scrollView控制titleView,如果需要实现scrollView滚动拖动
      titleView滚动的话,需在外界调用这个方法
      */
-    func scrollTitle(index: Int)
+    func scrollTitle(_ index: Int)
     {
-        UIView.animateWithDuration(duration) { () -> Void in
-            self.line.frame = CGRectMake(self.Width * CGFloat(index), 41, self.Width, 3)
+        UIView.animate(withDuration: duration, animations: { () -> Void in
+            self.line.frame = CGRect(x: self.Width * CGFloat(index), y: 41, width: self.Width, height: 3)
             for btn in (self.subviews) {
                 if btn.tag > 0 {
                     let newBtn = btn as! UIButton
-                    newBtn.selected = false
+                    newBtn.isSelected = false
                 }
             }
-        }
-        buttons[index].selected = true
+        }) 
+        buttons[index].isSelected = true
     }
     
     required init?(coder aDecoder: NSCoder) {

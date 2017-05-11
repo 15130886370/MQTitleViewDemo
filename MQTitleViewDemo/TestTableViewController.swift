@@ -16,12 +16,6 @@ class TestTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        //automaticallyAdjustsScrollViewInsets = false
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem()
     }
 
     override func didReceiveMemoryWarning() {
@@ -32,14 +26,14 @@ class TestTableViewController: UITableViewController {
     // MARK: - Table view data source
 
 
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
         return 20
     }
 
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("cellID", forIndexPath: indexPath) as! TestCell
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cellID", for: indexPath) as! TestCell
         if let str = data
         {
             cell.cellLabel.text = "\(str)" + "\(indexPath.row)"
